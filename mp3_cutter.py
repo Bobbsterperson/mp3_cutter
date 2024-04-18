@@ -1,16 +1,17 @@
-from pytube import YouTube
+from time import sleep
+import sys
 
+def loadbar(iteration, total, prefix="", suffix="", decimals=1, length=100, fill="卐"):
+    percent = 100 * (iteration / float(total))
+    filled_length = int(length * iteration // total)
+    bar = fill * filled_length + "-" * (length - filled_length)
+    sys.stdout.write('\r%s |%s| %s%% %s' % (prefix, bar, format(percent, f".{decimals}f"), suffix))
+    sys.stdout.flush()
 
-def download_audio(url):
-    try:
-        yt = YouTube(url)
-        audio_stream = yt.streams.filter(only_audio=True).first()
-        audio_stream.download(filename='audio.mp3')
-        print("Here ya go shuga!")
-    except Exception as e:
-        print("No such thang...", e)
+items = list(range(0, 50))
+total_items = len(items)
 
-
-if __name__ == "__main__":
-    video_url = input("Whatcha whanna download?!")
-    download_audio(video_url)
+loadbar(0, 1, prefix="Progress:", suffix="Complete", length=total_items)
+for i, item in enumerate(items):
+    sleep(0.1)
+    loadbar(i + 1, total_items, prefix="Progress:", suffix="Complete", length=total_items)
